@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:weather_application/model/forecast.dart';
 import 'package:weather_application/services/api_service.dart';
 import 'package:weather_application/model/weather_data.dart';
@@ -39,8 +40,10 @@ class HomeController extends GetxController {
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
         permission = await Geolocator.requestPermission();
-        if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+        if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+          _showPermissionDialog();
           errorMessage.value = 'Location permission denied.';
+          isLoading.value = false;
           return;
         }
       }
@@ -58,6 +61,30 @@ class HomeController extends GetxController {
       errorMessage.value = 'Failed to get location or fetch weather: $e';
       isLoading.value = false;
     }
+  }
+
+  void _showPermissionDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: const Text("Location Permission Required"),
+        content: const Text("This app needs location access to display weather data for your area."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await openAppSettings(); // Opens app settings
+            },
+            child: const Text("Settings"),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> fetchWeather(String city) async {
