@@ -12,6 +12,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 14, 17, 23),
+          elevation: 0,
+          title: Text('Weather Application',
+              style: GoogleFonts.inter(
+                  color: Colors.white, fontWeight: FontWeight.w500)),
+        ),
         backgroundColor: const Color(0xff161621),
         body: SingleChildScrollView(
             child: Padding(
@@ -25,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.white),
                       controller: homeController.searchController,
                       decoration: const InputDecoration(
-                        hintText: 'Enter city name',
+                        hintText: 'Search for a city',
                         hintStyle: TextStyle(color: Colors.white),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -49,12 +56,13 @@ class HomeScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (homeController.searchController.text.isNotEmpty) {
-                        homeController.fetchWeather(homeController.searchController.text);
+                        homeController
+                            .fetchWeather(homeController.searchController.text);
                       }
                     },
                   ),
                 ],
-              ).paddingOnly(top: 12),
+              ).paddingOnly(top: 18),
               const SizedBox(height: 45),
               Obx(() {
                 final data = homeController.weatherData.value;
@@ -70,24 +78,32 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         data.cityName,
                         maxLines: 2,
-                        style:
-                            GoogleFonts.inter(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
                       ),
                       Text(
                         '${data.temperature}°C',
                         maxLines: 2,
-                        style: GoogleFonts.inter(color: Colors.white, fontSize: 78),
+                        style: GoogleFonts.inter(
+                            color: Colors.white, fontSize: 78),
                       ),
                       Text(
-                        data.description,
+                        data.description.toUpperCase(),
                         maxLines: 2,
-                        style: GoogleFonts.inter(color: Colors.white, fontSize: 18),
+                        style: GoogleFonts.inter(
+                            color: Colors.white, fontSize: 18),
                       ),
                       const SizedBox(height: 25),
                       Text('Wind Speed: ${data.windSpeed} m/s',
-                          maxLines: 2, style: GoogleFonts.inter(color: Colors.white, fontSize: 18)),
+                          maxLines: 2,
+                          style: GoogleFonts.inter(
+                              color: Colors.white, fontSize: 18)),
                       Text('Humidity: ${data.humidity}%',
-                          maxLines: 2, style: GoogleFonts.inter(color: Colors.white, fontSize: 18)),
+                          maxLines: 2,
+                          style: GoogleFonts.inter(
+                              color: Colors.white, fontSize: 18)),
                       SizedBox(
                         width: 200,
                         height: 200,
@@ -101,7 +117,8 @@ class HomeScreen extends StatelessWidget {
                 } else if (homeController.errorMessage.isNotEmpty) {
                   return Center(
                       child: Text(homeController.errorMessage.value,
-                          style: GoogleFonts.inter(color: Colors.white, fontSize: 18)));
+                          style: GoogleFonts.inter(
+                              color: Colors.white, fontSize: 18)));
                 }
 
                 return const SizedBox();

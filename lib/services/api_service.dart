@@ -12,7 +12,26 @@ class ApiService {
       throw Exception('API key is missing.');
     }
 
-    final response = await http.get(Uri.parse('$baseUrl?q=$city&appid=$apiKey&units=metric'));
+    final response = await http
+        .get(Uri.parse('$baseUrl?q=$city&appid=$apiKey&units=metric'));
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return WeatherData.fromJson(jsonData);
+    } else {
+      throw Exception('Failed to load weather data');
+    }
+  }
+
+  // Fetch weather data by location (latitude and longitude)
+  Future<WeatherData> fetchWeatherByLocation(
+      double latitude, double longitude) async {
+    final apiKey = dotenv.env['API_KEY'];
+    if (apiKey == null) {
+      throw Exception('API key is missing.');
+    }
+    final response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric'));
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
