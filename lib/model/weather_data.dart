@@ -40,14 +40,21 @@ class WeatherData {
     return WeatherData(
       temperature:
           (json['main']['temp'] is int) ? (json['main']['temp'] as int).toDouble() : json['main']['temp'],
-      feelsLike: json['main']['feels_like'],
-      tempMin: json['main']['temp_min'],
-      tempMax: json['main']['temp_max'],
+      feelsLike: (json['main']['feels_like'] is int)
+          ? (json['main']['feels_like'] as int).toDouble()
+          : json['main']['feels_like'],
+      tempMin: (json['main']['temp_min'] is int)
+          ? (json['main']['temp_min'] as int).toDouble()
+          : json['main']['temp_min'],
+      tempMax: (json['main']['temp_max'] is int)
+          ? (json['main']['temp_max'] as int).toDouble()
+          : json['main']['temp_max'],
       pressure: json['main']['pressure'],
       humidity: json['main']['humidity'],
       description: json['weather'][0]['description'],
       icon: json['weather'][0]['icon'],
-      windSpeed: json['wind']['speed'],
+      windSpeed:
+          (json['wind']['speed'] is int) ? (json['wind']['speed'] as int).toDouble() : json['wind']['speed'],
       cityName: json['name'],
       cloudiness: json['clouds']['all'],
       country: json['sys']['country'],
