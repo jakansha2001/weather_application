@@ -92,9 +92,13 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 25),
                       Text('Wind Speed: ${data.windSpeed} m/s',
-                          maxLines: 2, style: GoogleFonts.inter(color: Colors.white, fontSize: 18)),
+                          maxLines: 2,
+                          style: GoogleFonts.inter(
+                              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500)),
                       Text('Humidity: ${data.humidity}%',
-                          maxLines: 2, style: GoogleFonts.inter(color: Colors.white, fontSize: 18)),
+                          maxLines: 2,
+                          style: GoogleFonts.inter(
+                              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500)),
                       SizedBox(
                         width: 180,
                         height: 180,
@@ -105,16 +109,25 @@ class HomeScreen extends StatelessWidget {
                       ),
                       // 5-day forecast
                       const SizedBox(height: 10),
-                      const Text(
-                        '5-Day Forecast',
-                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 14, 17, 23),
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                          ),
+                          child: const Text(
+                            '5-Day Forecast',
+                            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                          ).paddingAll(14),
+                        ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       if (forecast.isNotEmpty)
                         SizedBox(
-                          height: 150, 
+                          height: 150,
                           child: ListView.builder(
-                            scrollDirection: Axis.horizontal, 
+                            scrollDirection: Axis.horizontal,
                             itemCount: forecast.length,
                             itemBuilder: (context, index) {
                               var forecastItem = forecast[index];
@@ -131,7 +144,8 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 5),
                                     Text('${forecastItem.temp}°C',
-                                        style: const TextStyle(color: Colors.white)),
+                                        style: const TextStyle(
+                                            color: Colors.white, fontWeight: FontWeight.bold)),
                                     const SizedBox(height: 5),
                                     Text(forecastItem.description,
                                         style: const TextStyle(color: Colors.white)),
