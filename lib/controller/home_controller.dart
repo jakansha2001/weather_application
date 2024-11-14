@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:weather_application/model/forecast.dart';
 import 'package:weather_application/services/api_service.dart';
 import 'package:weather_application/model/weather_data.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,6 +11,7 @@ class HomeController extends GetxController {
   var isLoading = false.obs;
   var weatherData = Rxn<WeatherData>();
   var errorMessage = ''.obs;
+  var forecastData = Rx<List<Forecast>>([]);
 
   @override
   void onInit() {
@@ -23,6 +25,7 @@ class HomeController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
     weatherData.value = null;
+    forecastData.value = [];
 
     try {
       // Check if location services are enabled
@@ -34,11 +37,9 @@ class HomeController extends GetxController {
 
       // Request permission to access location
       LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
         permission = await Geolocator.requestPermission();
-        if (permission != LocationPermission.whileInUse &&
-            permission != LocationPermission.always) {
+        if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
           errorMessage.value = 'Location permission denied.';
           return;
         }
@@ -63,10 +64,13 @@ class HomeController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
     weatherData.value = null;
+    forecastData.value = [];
 
     try {
       var data = await ApiService().fetchWeather(city);
       weatherData.value = data;
+      var forecast = await ApiService().fetchForecast(city); // Fetch forecast
+      forecastData.value = forecast;
     } catch (e) {
       errorMessage.value = 'City not found!';
     }
@@ -79,10 +83,13 @@ class HomeController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
     weatherData.value = null;
+    forecastData.value = [];
 
     try {
       var data = await ApiService().fetchWeatherByLocation(latitude, longitude);
       weatherData.value = data;
+      var forecast = await ApiService().fetchForecastByLocation(latitude, longitude);
+      forecastData.value = forecast;
     } catch (e) {
       errorMessage.value = 'Weather fetch failed: $e';
     }

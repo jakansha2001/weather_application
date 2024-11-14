@@ -1,3 +1,5 @@
+import 'package:weather_application/model/forecast.dart';
+
 class WeatherData {
   final double temperature;
   final double feelsLike;
@@ -13,6 +15,7 @@ class WeatherData {
   final String country;
   final int sunrise;
   final int sunset;
+  final List<Forecast> forecast;
 
   WeatherData({
     required this.temperature,
@@ -29,11 +32,14 @@ class WeatherData {
     required this.country,
     required this.sunrise,
     required this.sunset,
+    required this.forecast,
   });
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
+    List<Forecast> forecastList = [];
     return WeatherData(
-      temperature: json['main']['temp'],
+      temperature:
+          (json['main']['temp'] is int) ? (json['main']['temp'] as int).toDouble() : json['main']['temp'],
       feelsLike: json['main']['feels_like'],
       tempMin: json['main']['temp_min'],
       tempMax: json['main']['temp_max'],
@@ -47,6 +53,7 @@ class WeatherData {
       country: json['sys']['country'],
       sunrise: json['sys']['sunrise'],
       sunset: json['sys']['sunset'],
+      forecast: forecastList,
     );
   }
 
